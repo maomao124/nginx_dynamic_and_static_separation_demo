@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<!--
+Project name(项目名称)：nginx_dynamic_and_static_separation_demo
+  File name(文件名): index
+  Authors(作者）: mao
+  Author QQ：1296193245
+  GitHub：https://github.com/maomao124/
+  Date(创建日期)： 2023/5/19
+  Time(创建时间)： 13:33
+  Description(描述)： 无
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>索引</title>
+</head>
+<body onload="load()">
+
+<p>以下为动态资源：</p>
+
+
+<p>学号为10001的学生：</p>
+<p id="student"></p>
+
+<p>所有学生：</p>
+<p id="studentList"></p>
+
+
+
+<br>
+<br>
+
+<p>以下为静态资源：</p>
+
+<img src="/static/1.png">
+
+<br>
+
+<img src="/static/2.png">
+
+</body>
+
+<script>
+
+    function load()
+    {
+        //XMLHttpRequest对象
+        let xhr;
+        //是否正在发送请求
+        let isSending = false;
+        //如果正在发送请求
+        if (isSending === true)
+        {
+            //取消正在发送的请求
+            xhr.abort();
+        }
+        //发起异步请求
+        xhr = new XMLHttpRequest();
+        //设置响应信息为json
+        xhr.responseType = "json";
+        //超时设置，单位为毫秒
+        xhr.timeout = 5000;
+        //超时的回调函数
+        xhr.ontimeout = function ()
+        {
+            alert("请求超时，请稍后再试！");
+        }
+        //初始化，设置请求方式和url
+        xhr.open("GET", "/student/10001");
+        //设置状态为正在发送
+        isSending = true;
+        //发送异步请求
+        xhr.send();
+
+        xhr.onreadystatechange = function ()
+        {
+            //状态为4时处理
+            if (xhr.readyState === 4)
+            {
+                //落在200-300之间处理
+                if (xhr.status >= 200 && xhr.status < 300)
+                {
+                    //将状态设置成false
+                    isSending = false;
+                    console.log(xhr.response);
+                    document.getElementById("student").innerHTML = JSON.stringify(xhr.response);
+                }
+            }
+        }
+        load2();
+    }
+
+    function load2()
+    {
+        //XMLHttpRequest对象
+        let xhr;
+        //是否正在发送请求
+        let isSending = false;
+        //如果正在发送请求
+        if (isSending === true)
+        {
+            //取消正在发送的请求
+            xhr.abort();
+        }
+        //发起异步请求
+        xhr = new XMLHttpRequest();
+        //设置响应信息为json
+        xhr.responseType = "json";
+        //超时设置，单位为毫秒
+        xhr.timeout = 5000;
+        //超时的回调函数
+        xhr.ontimeout = function ()
+        {
+            alert("请求超时，请稍后再试！");
+        }
+        //初始化，设置请求方式和url
+        xhr.open("GET", "/student/all");
+        //设置状态为正在发送
+        isSending = true;
+        //发送异步请求
+        xhr.send();
+
+        xhr.onreadystatechange = function ()
+        {
+            //状态为4时处理
+            if (xhr.readyState === 4)
+            {
+                //落在200-300之间处理
+                if (xhr.status >= 200 && xhr.status < 300)
+                {
+                    //将状态设置成false
+                    isSending = false;
+                    console.log(xhr.response);
+                    document.getElementById("studentList").innerHTML = JSON.stringify(xhr.response);
+                }
+            }
+        }
+    }
+
+</script>
+
+</html>
